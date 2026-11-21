@@ -1,0 +1,61 @@
+---
+import 'katex/dist/katex.min.css';
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { bibtex, getPapers, isoDate, pdfPath, type Paper } from '../../../lib/research';
+
+export async function getStaticPaths() {
+  return (await getPapers()).map((paper) => ({ params: { id: paper.id }, props: { paper } }));
+}
+
+interface Props {
+  paper: Paper;
+}
+const { paper } = Astro.props;
+const { data } = paper;
+const { Content } = await render(paper);
+const url = new URL(`/research/${paper.id}/`, Astro.site).href;
+const hasPdf = Boolean(pdfPath(paper));
+---
+
+<Base title={data.title} description={data.abstract} lang={data.lang}>
+  <Fragment slot="head">
+    <meta name="citation_title" content={data.title} />
+    {data.authors.map((a) => <meta name="citation_author" content={a} />)}
+    <meta name="citation_publication_date" content={isoDate(data.date).replaceAll('-', '/')} />
+    {hasPdf && <meta name="citation_pdf_url" content={`${url}paper.pdf`} />}
+  </Fragment>
+  <article>
+    <header class="paper-head">
+      <h1>{data.title}{data.draft && <span class="draft">draft</span>}</h1>
+      <p class="meta">
+        {data.authors.join(', ')} · <time datetime={isoDate(data.date)}>{isoDate(data.date)}</time>
+        {data.updated && <> · rev. <time datetime={isoDate(data.updated)}>{isoDate(data.updated)}</time></>}
+        {data.tags.length > 0 && <> · {data.tags.join(', ')}</>}
+      </p>
+      <p class="abstract"><strong>Abstract</strong>{data.abstract}</p>
+      <ul class="links">
+        {data.arxiv && <li><a href={`https://arxiv.org/abs/${data.arxiv}`}>arXiv:{data.arxiv}</a></li>}
+        {hasPdf && <li><a href="paper.pdf">PDF</a></li>}
+        <li><a href="source.md">Markdown</a></li>
+        <li><a href="#cite">BibTeX</a></li>
+      </ul>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+    <details class="cite" id="cite">
+      <summary>Cite this note (BibTeX)</summary>
+      <pre><code>{bibtex(paper, url)}</code></pre>
+    </details>
+  </article>
+</Base>
+
+<script>
+  // Following the [BibTeX] link should open the citation block it points at.
+  const open = () => {
+    if (location.hash === '#cite') document.getElementById('cite')?.setAttribute('open', '');
+  };
+  addEventListener('hashchange', open);
+  open();
+</script>

@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import EntryList from '../../layouts/EntryList.astro';
+import { getPapers, type Paper } from '../../lib/research';
+
+const papers = await getPapers();
+const byYear = new Map<number, Paper[]>();
+for (const p of papers) {
+  const y = p.data.date.getUTCFullYear();
+  byYear.set(y, [...(byYear.get(y) ?? []), p]);
+}
+---
+
+<Base title="Research" description="Research notes on quantitative trading and DeFi.">
+  <h1>Research</h1>
+  <p>
+    Working notes and papers on quantitative trading and DeFi. Every entry links to its Markdown
+    source and PDF. Subscribe by <a href="/rss.xml">RSS</a>.
+  </p>
+  {papers.length === 0 && <p class="muted">Nothing published yet.</p>}
+  {
+    [...byYear].map(([year, list]) => (
+      <section>
+        <h2 class="year">{year}</h2>
+        <EntryList papers={list} />
+      </section>
+    ))
+  }
+</Base>

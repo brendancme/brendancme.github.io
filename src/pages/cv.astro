@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import { education, experience, honors } from '../data/cv';
+
+const sections = [
+  { title: 'Experience', entries: experience },
+  { title: 'Education', entries: education },
+  { title: 'Honors', entries: honors },
+];
+---
+
+<Base title="CV" description="Experience, education and honors of Brendan C. Lee.">
+  <h1>Curriculum vitae</h1>
+  {
+    sections.map((s) => (
+      <section>
+        <h2 class="section-label">{s.title}</h2>
+        <ul class="cv">
+          {s.entries.map((e) =>
+            e.roles.length === 1 ? (
+              <li>
+                <div class="cv-line">
+                  <span>{e.what}</span>
+                  <span class="period">{e.roles[0].period}</span>
+                </div>
+                {e.roles[0].role && <div class="role">{e.roles[0].role}</div>}
+              </li>
+            ) : (
+              <li>
+                <div>{e.what}</div>
+                {e.roles.map((r) => (
+                  <div class="cv-line">
+                    <span class="role">{r.role}</span>
+                    <span class="period">{r.period}</span>
+                  </div>
+                ))}
+              </li>
+            ),
+          )}
+        </ul>
+      </section>
+    ))
+  }
+</Base>

@@ -1,0 +1,80 @@
+---
+import '../styles/global.css';
+import { execSync } from 'node:child_process';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: string;
+}
+
+const { title, description = site.description, lang = 'en' } = Astro.props;
+const fullTitle = title ? `${title} — ${site.name}` : site.name;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+let commit = '';
+try {
+  commit = execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] })
+    .toString()
+    .trim();
+} catch {}
+
+const nav = [
+  { href: '/research/', label: 'research' },
+  { href: '/portfolio/', label: 'portfolio' },
+  { href: '/cv/', label: 'cv' },
+];
+const here = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} — research`} href="/rss.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:image" content={new URL('/og.png', Astro.site)} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <slot name="head" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="masthead">
+        {/* On the home page the name is already the headline, so the home link is dropped. */}
+        {here !== '/' && <a href="/">{site.name}</a>}
+        <nav aria-label="Sections">
+          {
+            nav.map((n) => (
+              <a href={n.href} aria-current={here.startsWith(n.href) ? 'page' : undefined}>
+                {n.label}
+              </a>
+            ))
+          }
+        </nav>
+      </header>
+      <main>
+        <slot />
+      </main>
+      <footer class="colophon">
+        <span>© {new Date().getFullYear()} {site.name}</span>
+        <span>
+          <a href="/rss.xml">rss</a> · <a href={site.github}>github</a> ·{' '}
+          <a href={commit ? `${site.repo}/commit/${commit}` : site.repo}>{commit ? `rev ${commit}` : 'source'}</a>
+        </span>
+      </footer>
+    </div>
+  </body>
+</html>

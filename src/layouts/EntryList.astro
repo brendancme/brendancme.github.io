@@ -1,0 +1,26 @@
+---
+import { isoDate, type Paper } from '../lib/research';
+
+interface Props {
+  papers: Paper[];
+}
+const { papers } = Astro.props;
+---
+
+<ul class="entries">
+  {
+    papers.map((p) => (
+      <li>
+        <time class="date" datetime={isoDate(p.data.date)}>{isoDate(p.data.date)}</time>
+        <div>
+          <a class="title" href={`/research/${p.id}/`} lang={p.data.lang}>{p.data.title}</a>
+          {p.data.draft && <span class="draft">draft</span>}
+          <p lang={p.data.lang}>{p.data.abstract}</p>
+          {p.data.tags.length > 0 && (
+            <div class="tags">{p.data.tags.map((t) => <span>{t}</span>)}</div>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ul>

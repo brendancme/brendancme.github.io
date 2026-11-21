@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import EntryList from '../layouts/EntryList.astro';
+import { getPapers } from '../lib/research';
+import { site } from '../data/site';
+
+const papers = (await getPapers()).slice(0, 5);
+---
+
+<Base>
+  <h1>{site.name}</h1>
+  <p class="lede">
+    Quant trader and smart contract developer. I have recently started writing up small pieces of
+    research on quantitative trading and DeFi; at the moment I am looking at funding rates on
+    Bitfinex.
+  </p>
+  <p>
+    Until 2025 I was the smart contract developer at <a href="/portfolio/">Anzen</a>, where I wrote
+    the contracts behind the USDz stablecoin; before that I did the same job at SongRise. I am a director of Node Ag, a venture firm I
+    co-founded, and a limited partner at Evernew Capital.
+  </p>
+  <p>
+    Each note is published here as a web page, with the Markdown source and a PDF alongside, and an
+    arXiv link where there is one. Older things I built are in
+    the <a href="/portfolio/">portfolio</a>; the short version of my background is in
+    the <a href="/cv/">CV</a>.
+  </p>
+
+  <h2 class="section-label">Recent research</h2>
+  {
+    papers.length > 0 ? (
+      <EntryList papers={papers} />
+      <p style="margin-top:0.9rem"><a href="/research/">All research →</a></p>
+    ) : (
+      <p class="muted">Nothing published yet. The first notes are in progress.</p>
+    )
+  }
+
+  <h2 class="section-label">Elsewhere</h2>
+  <p><a href={site.github}>GitHub</a></p>
+</Base>

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 345" width="760" height="345" role="img">
+  <style>
+    :root { --ink: #1c1b19; --muted: #6e6a61; --rule: #cfcabb; --accent: #8a2a1c; --fill: #f4f1e8; }
+    @media (prefers-color-scheme: dark) {
+      :root { --ink: #e8e4d9; --muted: #958f82; --rule: #45423a; --accent: #e3a47a; --fill: #1d1c19; }
+    }
+    text { font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace; fill: var(--ink); }
+    .t { font-size: 13px; font-weight: 600; }
+    .s { font-size: 10px; fill: var(--muted); }
+    .l { font-size: 10px; fill: var(--muted); }
+    .box { fill: var(--fill); stroke: var(--ink); stroke-width: 1; }
+    .ext { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 3; }
+    .a { fill: none; stroke: var(--accent); stroke-width: 1.2; }
+    .head { fill: var(--accent); }
+  </style>
+  <defs>
+    <marker id="e" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="head" d="M0 0 8 4 0 8z"/>
+    </marker>
+  </defs>
+
+  <!-- row 1 -->
+  <rect class="ext" x="20" y="40" width="96" height="56"/>
+  <text class="t" x="68" y="65" text-anchor="middle">User</text>
+  <text class="s" x="68" y="81" text-anchor="middle">LINE chat</text>
+
+  <rect class="ext" x="176" y="40" width="124" height="56"/>
+  <text class="t" x="238" y="65" text-anchor="middle">LINE</text>
+  <text class="s" x="238" y="81" text-anchor="middle">Messaging API</text>
+
+  <rect class="box" x="370" y="40" width="160" height="56"/>
+  <text class="t" x="450" y="65" text-anchor="middle">Webhook</text>
+  <text class="s" x="450" y="81" text-anchor="middle">Flask · signature check</text>
+
+  <rect class="box" x="590" y="40" width="150" height="56"/>
+  <text class="t" x="665" y="65" text-anchor="middle">Router</text>
+  <text class="s" x="665" y="81" text-anchor="middle">regex on message text</text>
+
+  <path class="a" d="M116 68H176" marker-start="url(#e)" marker-end="url(#e)"/>
+  <text class="l" x="146" y="60" text-anchor="middle">command</text>
+  <path class="a" d="M300 68H370" marker-end="url(#e)"/>
+  <text class="l" x="335" y="60" text-anchor="middle">POST</text>
+  <path class="a" d="M530 68H590" marker-end="url(#e)"/>
+
+  <!-- fan-out -->
+  <path class="a" d="M665 96V128"/>
+  <path class="a" d="M335 128H665"/>
+  <path class="a" d="M335 128V160" marker-end="url(#e)"/>
+  <path class="a" d="M500 128V160" marker-end="url(#e)"/>
+  <path class="a" d="M665 128V160" marker-end="url(#e)"/>
+
+  <!-- row 2 -->
+  <rect class="box" x="260" y="160" width="150" height="56"/>
+  <text class="t" x="335" y="185" text-anchor="middle">Text reply</text>
+  <text class="s" x="335" y="201" text-anchor="middle">price · gas · address</text>
+
+  <rect class="box" x="425" y="160" width="150" height="56"/>
+  <text class="t" x="500" y="185" text-anchor="middle">Image reply</text>
+  <text class="s" x="500" y="201" text-anchor="middle">K-line · index charts</text>
+
+  <rect class="box" x="590" y="160" width="150" height="56"/>
+  <text class="t" x="665" y="185" text-anchor="middle">Flex reply</text>
+  <text class="s" x="665" y="201" text-anchor="middle">order book</text>
+
+  <!-- reply path -->
+  <path class="a" d="M260 188H238V96" marker-end="url(#e)"/>
+  <text class="l" x="230" y="150" text-anchor="end">reply</text>
+
+  <!-- row 3 -->
+  <rect class="ext" x="260" y="275" width="480" height="48"/>
+  <text class="t" x="500" y="296" text-anchor="middle">Market data</text>
+  <text class="s" x="500" y="312" text-anchor="middle">exchange, on-chain and index APIs</text>
+  <path class="a" d="M335 275V216" marker-end="url(#e)"/>
+  <path class="a" d="M500 275V216" marker-end="url(#e)"/>
+  <path class="a" d="M665 275V216" marker-end="url(#e)"/>
+</svg>

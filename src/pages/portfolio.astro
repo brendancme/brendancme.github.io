@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { projects } from '../data/portfolio';
+
+let n = 0;
+const numbered = projects.map((p) => ({ ...p, fig: p.figure ? ++n : 0 }));
+---
+
+<Base title="Portfolio" description="Side projects and past work by Brendan C. Lee.">
+  <h1>Portfolio</h1>
+  <p>Protocol work, side projects and client work, newest first.</p>
+  {
+    numbered.map((p) => (
+      <section class="project">
+        <h2>{p.name}</h2>
+        <p class="stack">{p.stack}{p.year && <> · {p.year}</>}</p>
+        {p.figure && (
+          <figure class:list={['figure', p.figure.layout]}>
+            {p.figure.src.format === 'svg' ? (
+              <div class="diagram">
+                <img
+                  src={p.figure.src.src}
+                  alt={p.figure.alt}
+                  width={p.figure.src.width}
+                  height={p.figure.src.height}
+                />
+              </div>
+            ) : (
+              <Image
+                src={p.figure.src}
+                alt={p.figure.alt}
+                widths={p.figure.layout === 'wide' ? [720, 1440] : [300, 600]}
+                sizes={p.figure.layout === 'wide' ? '(max-width: 46rem) 100vw, 720px' : '(max-width: 30rem) 100vw, 280px'}
+                loading={p.fig === 1 ? 'eager' : 'lazy'}
+              />
+            )}
+            <figcaption><b>Fig. {p.fig}</b> {p.figure.caption}</figcaption>
+          </figure>
+        )}
+        <p>{p.summary}</p>
+        {p.points && <ul>{p.points.map((x) => <li>{x}</li>)}</ul>}
+        {p.link && (
+          <ul class="links">
+            <li><a href={p.link.href}>{p.link.label}</a></li>
+          </ul>
+        )}
+      </section>
+    ))
+  }
+</Base>
